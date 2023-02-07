@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<title>Ro'yxatdan o'tish</title>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<!--===============================================================================================-->
+	<link rel="icon" type="image/png" href="{{ url_for('static', filename='main-static/images/icons/favicon.ico') }}" />
+	<!--===============================================================================================-->
+	<link rel="stylesheet" type="text/css"
+		href="{{ url_for('static', filename='main-static/vendor/bootstrap/css/bootstrap.min.css') }}">
+	<!--===============================================================================================-->
+	<link rel="stylesheet" type="text/css"
+		href="{{ url_for('static', filename='main-static/fonts/font-awesome-4.7.0/css/font-awesome.min.css') }}">
+	<!--===============================================================================================-->
+	<link rel="stylesheet" type="text/css"
+		href="{{ url_for('static', filename='main-static/fonts/iconic/css/material-design-iconic-font.min.css') }}">
+	<!--===============================================================================================-->
+	<link rel="stylesheet" type="text/css"
+		href="{{ url_for('static', filename='main-static/vendor/animate/animate.css') }}">
+	<!--===============================================================================================-->
+	<link rel="stylesheet" type="text/css"
+		href="{{ url_for('static', filename='main-static/vendor/css-hamburgers/hamburgers.min.css') }}">
+	<!--===============================================================================================-->
+	<link rel="stylesheet" type="text/css"
+		href="{{ url_for('static', filename='main-static/vendor/animsition/css/animsition.min.css') }}">
+	<!--===============================================================================================-->
+	<link rel="stylesheet" type="text/css"
+		href="{{ url_for('static', filename='main-static/vendor/select2/select2.min.css') }}">
+	<!--===============================================================================================-->
+	<link rel="stylesheet" type="text/css"
+		href="{{ url_for('static', filename='main-static/vendor/daterangepicker/daterangepicker.css') }}">
+	<!--===============================================================================================-->
+	<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='main-static/css/util.css') }}">
+	<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='main-static/css/register.css') }}">
+	<!--===============================================================================================-->
+</head>
+
+<body>
+
+	<div class="limiter">
+		<div class="container-login100"
+			style="background-image: url('{{ url_for('static', filename='') }}images/bg-01.jpg');">
+
+			<div class="wrap-login100">
+
+				<form method="post" action="" class="login100-form validate-form">
+					{{ form.hidden_tag() }}
+					<span class="login100-form-logo">
+						<i class="zmdi zmdi-landscape"></i>
+					</span>
+
+					<span class="login100-form-title p-b-34 p-t-27">
+						Ro'yxatdan o'tish
+					</span>
+					{% for msg in get_flashed_messages() %}
+					<div class="message">{{msg}}</div>
+					{% endfor %}
+					{% for error in form.psw1.errors %}
+					<div class="message">{{ error }}</div>
+					{% endfor%}
+
+					<div class="wrap-input100 validate-input" data-validate="Ismingizni kiriting!">
+						{{ form.name(class='input100') }}
+						<span class="focus-input100" data-placeholder="&#xf207;"></span>
+					</div>
+
+					<div class="wrap-input100 validate-i nput" data-validate="Parolni kititing!">
+						{{ form.psw(class='input100') }}
+						<span class="focus-input100" data-placeholder="&#xf191;"></span>
+					</div>
+
+					<div class="wrap-input100 validate-input" data-validate="Parolni noto'g'ri kiritdingiz!">
+						{{ form.psw1(class='input100') }}
+						<span class="focus-input100" data-placeholder="&#xf191;"></span>
+					</div>
+
+
+					<div class="container-login100-form-btn">
+						{{ form.submit(class='login100-form-btn') }}
+					</div>
+				</form>
+				<div class="mainpage_btn">
+					<a href="{{ url_for('main_page') }}">Asosiy sahifa</a>
+				</div>
+			</div>
+		</div>
+	</div>
+
+
+	<div id="dropDownSelect1"></div>
+
+	<!--===============================================================================================-->
+	<script src="{{ url_for('static', filename='main-static/vendor/jquery/jquery-3.2.1.min.js') }}"></script>
+	<!--===============================================================================================-->
+	<script src="{{ url_for('static', filename='main-static/vendor/animsition/js/animsition.min.js') }}"></script>
+	<!--===============================================================================================-->
+	<script src="{{ url_for('static', filename='main-static/vendor/bootstrap/js/popper.js') }}"></script>
+	<script src="{{ url_for('static', filename='main-static/vendor/bootstrap/js/bootstrap.min.js') }}"></script>
+	<!--===============================================================================================-->
+	<script src="{{ url_for('static', filename='main-static/vendor/select2/select2.min.js') }}"></script>
+	<!--===============================================================================================-->
+	<script src="{{ url_for('static', filename='main-static/vendor/daterangepicker/moment.min.js') }}"></script>
+	<script src="{{ url_for('static', filename='main-static/vendor/daterangepicker/daterangepicker.js') }}"></script>
+	<!--===============================================================================================-->
+	<script src="{{ url_for('static', filename='main-static/vendor/countdowntime/countdowntime.js') }}"></script>
+	<!--===============================================================================================-->
+	<script src="{{ url_for('static', filename='main-static/js/main.js') }}"></script>
+
+</body>
+
+</html>

@@ -1,0 +1,85 @@
+{% extends 'admin-templates/admin_base_template/base.html' %}
+
+{% block head %}{% endblock head %}
+
+
+{% block header %}
+<div class="header_wrapper">
+    <a href="" class="logotype_conteiner">
+        <img src="{{ url_for('static', filename='admin-static/logotype/header-logotype.png') }}" alt="ZT"
+            class="logotype_img">
+    </a>
+
+    <div class="admin-menu_wrapper">
+        <nav class="admin-nav  header-admin-nav">
+            <a href="{{ url_for('subjects_list') }}" class="admin-nav-item activate_page">Fanlar</a>
+            <a href="{{ url_for('users') }}" class="admin-nav-item">Foydalanuvchilar</a>
+            <a href="{{ url_for('tests_list') }}" class="admin-nav-item">Testlar</a>
+        </nav>
+        <a href="{{ url_for('logout') }}" class="admin-header_btn">Chiqish</a>
+    </div>
+
+</div>
+<nav class="admin-nav header-admin-nav min_screen">
+    <a href="{{ url_for('subjects_list') }}" class="admin-nav-item activate_page">Fanlar</a>
+    <a href="" class="admin-nav-item">Foydalanuvchilar</a>
+    <a href="" class="admin-nav-item">Testlar</a>
+</nav>
+{% endblock header %}
+<!-- ===================================== -->
+
+<!-- ===================================== -->
+{% block main %}
+
+<nav class="main-navbar">
+    <a href="{{ url_for('users') }}" class="main-navbar-item admin-nav-item">List</a>
+    <a href="{{ url_for('add_user') }}" class="main-navbar-item admin-nav-item  activate_page">Add</a>
+</nav>
+
+<div class="form_wrapper">
+    <form action="{{ url }}" method="post">
+        {{ form.hidden_tag() }}
+        <!-- ========================================= -->
+        <label class="label-input">
+            <span>Ism</span>
+            {{ form.name(class="add-form-input") }}
+        </label>
+        <label class="label-input">
+            <span>Parol</span>
+            {{ form.psw(class="add-form-input") }}
+        </label>
+        <!-- ========================================= -->
+
+        <!-- ========================================= -->
+        <div class="form-checkbox_wrapper">
+            <!-- ------------------------------------- -->
+            <label class="label-checkbox">
+                <span>Admin</span>
+                {{ form.is_admin(class="add-form-checkbox") }}
+            </label>
+            <!-- ------------------------------------- -->
+            <label class="label-checkbox">
+                <span>Ruxsat</span>
+                {{ form.permission(class="add-form-checkbox") }}
+            </label>
+            <!-- ------------------------------------- -->
+            <label class="label-checkbox">
+                <span>Foydalanuvchi</span>
+                {{ form.is_user(class="add-form-checkbox") }}
+            </label>
+            <!-- ------------------------------------- -->
+        </div>
+        <!-- ========================================= -->
+        <div class="form-btns_wrapper">
+            {{ form.submit(class="form-btn save-btn", value="Qoshish") }}
+            <a href="{{ url_for('subjects_list') }}" class="form-btn cansel-btn">Bekor</a>
+        </div>
+        <!-- ========================================= -->
+    </form>
+</div>
+
+
+{% endblock main %}
+
+
+{% block javascripts %}{% endblock javascripts %}

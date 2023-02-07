@@ -1,0 +1,82 @@
+{% extends 'admin-templates/admin_base_template/base.html' %}
+
+{% block head %}{% endblock head %}
+
+
+{% block header %}
+<div class="header_wrapper">
+    <a href="" class="logotype_conteiner">
+        <img src="{{ url_for('static', filename='admin-static/logotype/header-logotype.png') }}" alt="ZT"
+            class="logotype_img">
+    </a>
+
+    <div class="admin-menu_wrapper">
+        <nav class="admin-nav  header-admin-nav">
+            <a href="{{ url_for('subjects_list') }}" class="admin-nav-item activate_page">Fanlar</a>
+            <a href="{{ url_for('users') }}" class="admin-nav-item">Foydalanuvchilar</a>
+            <a href="{{ url_for('tests_list') }}" class="admin-nav-item">Testlar</a>
+        </nav>
+        <a href="{{ url_for('logout') }}" class="admin-header_btn">Chiqish</a>
+    </div>
+
+</div>
+<nav class="admin-nav header-admin-nav min_screen">
+    <a href="{{ url_for('subjects_list') }}" class="admin-nav-item activate_page">Fanlar</a>
+    <a href="" class="admin-nav-item">Foydalanuvchilar</a>
+    <a href="" class="admin-nav-item">Testlar</a>
+</nav>
+{% endblock header %}
+<!-- ===================================== -->
+
+<!-- ===================================== -->
+{% block main %}
+
+<nav class="main-navbar">
+    <a href="{{ url_for('subjects_list') }}" class="main-navbar-item admin-nav-item">List</a>
+    <a href="#" class="main-navbar-item admin-nav-item  activate_page">Add</a>
+</nav>
+
+<div class="form_wrapper">
+    <form action="{{ url }}" method="post">
+        {{ form.hidden_tag() }}
+        <!-- ========================================= -->
+        <label class="label-input">
+            <span>Fanni nomi</span>
+            {{ form.subject_name(class="add-form-input") }}
+        </label>
+        <!-- ========================================= -->
+        <label class="label-input">
+            <span>Testda tushishi kerak bo'lgan testlar soni</span>
+            {{ form.subject_count(class="add-form-input") }}
+        </label>
+        <!-- ========================================= -->
+
+        <!-- ========================================= -->
+        <div class="form-checkbox_wrapper">
+            <!-- ------------------------------------- -->
+            <label class="label-checkbox">
+                <span>Yakka</span>
+                {{ form.separate(class="add-form-checkbox") }}
+            </label>
+            <!-- ------------------------------------- -->
+            <label class="label-checkbox">
+                <span>Aralash</span>
+                {{ form.mixed(class="add-form-checkbox") }}
+            </label>
+            <!-- ------------------------------------- -->
+        </div>
+        <!-- ========================================= -->
+        <div class="form-btns_wrapper">
+            {{ form.submit(class="form-btn save-btn", value="Qoshish") }}
+            <a href="{{ url_for('subjects_list') }}" class="form-btn cansel-btn">Cansel</a>
+        </div>
+        <!-- ========================================= -->
+    </form>
+
+</div>
+
+
+{% endblock main %}
+
+
+{% block javascripts %}{% endblock javascripts %}

@@ -1,0 +1,139 @@
+{% extends 'admin-templates/admin_base_template/base.html' %}
+
+{% block head %}{% endblock head %}
+
+
+{% block header %}
+<div class="header_wrapper">
+    <a href="" class="logotype_conteiner">
+        <img src="{{ url_for('static', filename='admin-static/logotype/header-logotype.png') }}" alt="ZT"
+            class="logotype_img">
+    </a>
+
+    <div class="admin-menu_wrapper">
+        <nav class="admin-nav  header-admin-nav">
+            <a href="{{ url_for('subjects_list') }}" class="admin-nav-item">Fanlar</a>
+            <a href="{{ url_for('users') }}" class="admin-nav-item">Foydalanuvchilar</a>
+            <a href="{{ url_for('tests_list') }}" class="admin-nav-item activate_page">Testlar</a>
+        </nav>
+        <a href="{{ url_for('logout') }}" class="admin-header_btn">Chiqish</a>
+    </div>
+
+</div>
+<nav class="admin-nav header-admin-nav min_screen">
+    <a href="{{ url_for('subjects_list') }}" class="admin-nav-item">Fanlar</a>
+    <a href="admin-users_list.html" class="admin-nav-item">Foydalanuvchilar</a>
+    <a href="#" class="admin-nav-item activate_page">Testlar</a>
+</nav>
+{% endblock header %}
+<!-- ===================================== -->
+
+<!-- ===================================== -->
+{% block main %}
+
+<nav class="main-navbar">
+    <a href="#" class="main-navbar-item admin-nav-item activate_page">List</a>
+    <a href="{{ url_for('test_add') }}" class="main-navbar-item admin-nav-item">Add</a>
+    <a href="" id="delete-btn" class="main-navbar-item admin-nav-item">Delete checked</a>
+</nav>
+
+
+<div class="content_wrapper">
+    <div class="search_in_list_wrapper">
+        <input type="text" placeholder="Izlash" id="search_in_list" class="admin_input search_in_list">
+    </div>
+    <form action="{{ url_for('delete_tests') }}" method="post">
+        {{ form.hidden_tag() }}
+        {{ form.chekboxes_list(class='hidden', id="input_for_submit_cheked_checkboxs") }}
+        {{ form.submit(class='hidden', id="submit_cheked_checkboxs") }}
+    </form>
+
+    <div class="table_wrapper">
+
+        <table id="table">
+            <!-- ----------------------------- -->
+            <thead>
+                <tr class="table-title">
+                    <th class="table-title-checkbox">
+                        <label>
+                            <input id="select_all" class="table-checkbox" type="checkbox" name="" id="">
+                        </label>
+                    </th>
+                    <th class="col-table-btns"></th>
+                    <th>Fan</th>
+                    <th>Savol</th>
+                    <th>Togri javob</th>
+                    <th>Javob-1</th>
+                    <th>Javob-2</th>
+                    <th>Javob-3</th>
+                </tr>
+            </thead>
+            <!-- ----------------------------- -->
+            <tbody id="tbody">
+                {% for i in data %}
+                <!-- ----------------------------- -->
+                <tr id="table-row" class="table-row">
+                    <td class="table-td-checkbox">
+                        <label>
+                            <input value="{{ i.id }}" class="table-checkbox" type="checkbox" name="check" id="">
+                        </label>
+                    </td>
+                    <td class="col-table-btns">
+                        <div class="table-btns_wrapper">
+                            <!-- ----------------------------- -->
+                            <a href="{{ url_for('delete_test', id=i.id) }}" class="table-btn delete_row">
+                                <svg width="17" height="22" viewBox="0 0 17 22" fill="none"
+                                    xmlns="http://www.w3.org/2000/svg">
+                                    <path
+                                        d="M1.25 19.3333C1.25 20.6685 2.33146 21.75 3.66667 21.75H13.3333C14.6685 21.75 15.75 20.6685 15.75 19.3333V4.83333H1.25V19.3333ZM16.9583 1.20833H12.7292L11.5208 0H5.47917L4.27083 1.20833H0.0416679V3.625H16.9583V1.20833Z"
+                                        fill="#606060" />
+                                </svg>
+                            </a>
+                            <!-- ----------------------------- -->
+                            <a href="{{ url_for('edit_test', id=i.id) }}" class="table-btn edit_row">
+                                <svg width="21" height="20" viewBox="0 0 21 20" fill="none"
+                                    xmlns="http://www.w3.org/2000/svg">
+                                    <path
+                                        d="M0.375 15.6875V19.75H4.59375L17.0247 7.77938L12.806 3.71698L0.375 15.6875ZM20.2876 4.6374C20.7375 4.20418 20.7375 3.55403 20.2876 3.12081L17.6438 0.574896C17.1939 0.141681 16.5187 0.141681 16.0689 0.574896L13.9875 2.57918L18.2062 6.64158L20.2876 4.6374Z"
+                                        fill="#606060" />
+                                </svg>
+                            </a>
+                            <!-- ----------------------------- -->
+                        </div>
+                    </td>
+                    <td>
+                        {% for subject in subjects %}
+                        {% if subject == i.subject %}
+                        {{ subject.name }}
+                        {% endif %}
+                        {% endfor %}
+                    </td>
+                    <td>{{ i.ques | safe }}</td>
+                    <td>{{ i.true | safe }}</td>
+                    <td>{{ i.false1 | safe }}</td>
+                    <td>{{ i.false2 | safe }}</td>
+                    <td>{{ i.false3 | safe }}</td>
+                </tr>
+                <!-- ----------------------------- -->
+                {% endfor %}
+            </tbody>
+            <!-- ----------------------------- -->
+        </table>
+        <style>
+            .hidden {
+                display: none;
+            }
+
+            table img {
+                max-width: 50px;
+                max-height: 50px;
+            }
+        </style>
+
+    </div>
+</div>
+
+{% endblock main %}
+
+
+{% block javascripts %}{% endblock javascripts %}

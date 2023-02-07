@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='main-static/css/test.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='main-static/css/main.css') }}">
+    <title>Onlayn test topshirish</title>
+</head>
+
+<body onload="onload();">
+    <div class="test-page__header">
+        <div class="main_header-block">
+            <div class="links">
+                <div class="link_btn">
+                    <a href="{{ url_for('main_page') }}">Asosiy sahifa</a>
+                </div>
+            </div>
+            <div class="timer">
+                <span id="hrs"></span>:<span id="min"></span>:<span id="sec"></span>
+            </div>
+        </div>
+    </div>
+    <div class="article">
+        <div class="test_main-block">
+            {% if result_items != [] %}
+            <form method="post" action="" id="testForm" name="testForm">
+                {{ form_hidden_tag.hidden_tag() }}
+                {% for i in result_items %}
+                <div id="test_items_with_timer" class="test_item">
+                    <div class="question">
+                        <p>{{ i['ques'] |safe }}</p>
+                    </div>
+                    <!-- <hr> -->
+                    <div class="seperate"></div>
+                    <div class="answers">
+                        {% if i['answers'] %}
+
+                        {% for j in i['answers'] %}
+                        <label class="test_items_with_timer">
+                            <input style="margin-right: 12px;" type="radio" id="" name="{{ i['id'] }}" value="{{ j }}">
+                            {{ j|safe }}
+                        </label><br>
+                        {% endfor %}
+                        {% endif %}
+                    </div>
+                </div>
+                <div class="sep_test"></div>
+                {% endfor %}
+
+                <button class="form_btn">Yakunlash</button>
+            </form>
+            {% else %}
+            <h3 style="text-align: center; color: rgb(12, 3, 87);">Testlar yuklanish jarayonida...</h3>
+            {% endif %}
+        </div>
+    </div>
+
+    <input style="display: none;" type="text" id="time" value="{{ time }}">
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
+    <script>
+        const hrs = document.getElementById("hrs")
+        const min = document.getElementById("min")
+        const sec = document.getElementById("sec")
+
+        // ----------------------------------------------
+
+        let time
+        // ------- -------- -------
+        function onload() {
+            time = document.getElementById('time');
+        }
+        // ------- -------- -------
+
+        function countdownTimer() {
+            // ------- -------- -------
+            const hour = new Date().getHours() * 1000 * 60 * 60;
+            const minute = new Date().getMinutes() * 1000 * 60;
+            const seconds = new Date().getSeconds() * 1000;
+            // ------- -------- -------
+            const nowTime = hour + minute + seconds;
+
+            // Проверят остаток времени
+            const gap = Number(time.value) - nowTime;
+
+
+            // Вычисляет
+            const h = Math.floor(gap / 1000 / 60 / 60);
+            const m = Math.floor(gap / 1000 / 60);
+            const s = Math.floor((gap / 1000) - (m * 60));
+
+            // ---------------------------------------------
+            if (h === 0 && m === 0 && s === 1) {
+                $('.form_btn').click();
+            }
+
+            hrs.innerHTML = h < 10 ? "0" + h : h;
+            min.innerHTML = m < 10 ? "0" + m : m;
+            sec.innerHTML = s < 10 ? "0" + s : s;
+
+            // ---------------------------------------------
+
+
+        } setInterval(countdownTimer, 1000)
+    </script>
+</body>
+
+</html>

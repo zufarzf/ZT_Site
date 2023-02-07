@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='main-static/css/main.css') }}">
+    <title>Onlayn test topshirish</title>
+</head>
+
+<body>
+    <div class="container">
+        <div class="header__top selection_header">
+            <div class="header_block">
+                <div class="logo">
+                    <a href="{{ url_for('main_page') }}">
+                        <img src="{{ url_for('static', filename='main-static/images/logo.png') }}" alt="">
+                    </a>
+                </div>
+                <div class="links">
+                    <div class="link_btn">
+                        <a href="{{ url_for('main_page') }}">Asosiy sahifa</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="main_select_block">
+            <div class="select_form">
+                <div class="selection_block">
+                    <form method="post" action="">
+                        {{ select.hidden_tag() }}
+                        <div class="first">
+                            {{ select.subject.label(class='fan') }} <br>
+                            {{ select.subject }}
+
+                        </div>
+
+                        <div class="second">
+                            {{ select.type.label }} <br>
+                            {{ select.type }}
+                        </div>
+                        {{ select.ball.label }}<br>
+                        {{ select.ball }}<br> <br>
+
+                        {{ select.submit }}
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>

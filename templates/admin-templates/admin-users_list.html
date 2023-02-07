@@ -1,0 +1,140 @@
+{% extends 'admin-templates/admin_base_template/base.html' %}
+
+{% block head %}{% endblock head %}
+
+
+{% block header %}
+<div class="header_wrapper">
+    <a href="" class="logotype_conteiner">
+        <img src="{{ url_for('static', filename='admin-static/logotype/header-logotype.png') }}" alt="ZT"
+            class="logotype_img">
+    </a>
+
+    <div class="admin-menu_wrapper">
+        <nav class="admin-nav  header-admin-nav">
+            <a href="{{ url_for('subjects_list') }}" class="admin-nav-item">Fanlar</a>
+            <a href="{{ url_for('users') }}" class="admin-nav-item activate_page">Foydalanuvchilar</a>
+            <a href="{{ url_for('tests_list') }}" class="admin-nav-item">Testlar</a>
+        </nav>
+        <a href="{{ url_for('logout') }}" class="admin-header_btn">Chiqish</a>
+    </div>
+
+</div>
+<nav class="admin-nav header-admin-nav min_screen">
+    <a href="" class="admin-nav-item">Fanlar</a>
+    <a href="" class="admin-nav-item activate_page">Foydalanuvchilar</a>
+    <a href="" class="admin-nav-item">Testlar</a>
+</nav>
+{% endblock header %}
+<!-- ===================================== -->
+
+<!-- ===================================== -->
+{% block main %}
+
+<nav class="main-navbar">
+    <a href="" class="main-navbar-item admin-nav-item activate_page">List</a>
+    <a href="admin-add.html" class="main-navbar-item admin-nav-item">Add</a>
+    <a href="" class="main-navbar-item admin-nav-item">Delete checked</a>
+</nav>
+
+
+<div class="content_wrapper">
+    <div class="search_in_list_wrapper">
+        <input type="text" placeholder="Izlash" id="search_in_list" class="admin_input search_in_list">
+    </div>
+
+    <form action="{{ url }}" method="post">
+        {{ form.hidden_tag() }}
+        {{ form.chekboxes_list(style="display: none;", id="input_for_submit_cheked_checkboxs") }}
+        {{ form.submit(style="display: none;", id="submit_cheked_checkboxs") }}
+    </form>
+    <div class="table_wrapper">
+
+        <table id="table">
+            <!-- ----------------------------- -->
+            <thead>
+                <tr class="table-title">
+                    <th class="table-title-checkbox">
+                        <label>
+                            <input id="select_all" class="table-checkbox" type="checkbox" name="" id="">
+                        </label>
+                    </th>
+                    <th class="col-table-btns"></th>
+                    <th class="name-col">Fanlar nomi</th>
+                    <th>Testlar soni</th>
+                    <th class="boolean_icons-th">Yakka</th>
+                    <th class="boolean_icons-th">Aralash</th>
+                </tr>
+            </thead>
+            <!-- ----------------------------- -->
+            <tbody id="tbody">
+                <!-- ----------------------------- -->
+                <tr id="table-row" class="table-row">
+                    <td class="table-td-checkbox">
+                        <label>
+                            <input value="1" class="table-checkbox" type="checkbox" name="1" id="">
+                        </label>
+                    </td>
+                    <td class="col-table-btns">
+                        <div class="table-btns_wrapper">
+                            <!-- ----------------------------- -->
+                            <a href="" class="table-btn delete_row">
+                                <svg width="17" height="22" viewBox="0 0 17 22" fill="none"
+                                    xmlns="http://www.w3.org/2000/svg">
+                                    <path
+                                        d="M1.25 19.3333C1.25 20.6685 2.33146 21.75 3.66667 21.75H13.3333C14.6685 21.75 15.75 20.6685 15.75 19.3333V4.83333H1.25V19.3333ZM16.9583 1.20833H12.7292L11.5208 0H5.47917L4.27083 1.20833H0.0416679V3.625H16.9583V1.20833Z"
+                                        fill="#606060" />
+                                </svg>
+
+                            </a>
+                            <!-- ----------------------------- -->
+                            <a href="" class="table-btn edit_row">
+                                <svg width="21" height="20" viewBox="0 0 21 20" fill="none"
+                                    xmlns="http://www.w3.org/2000/svg">
+                                    <path
+                                        d="M0.375 15.6875V19.75H4.59375L17.0247 7.77938L12.806 3.71698L0.375 15.6875ZM20.2876 4.6374C20.7375 4.20418 20.7375 3.55403 20.2876 3.12081L17.6438 0.574896C17.1939 0.141681 16.5187 0.141681 16.0689 0.574896L13.9875 2.57918L18.2062 6.64158L20.2876 4.6374Z"
+                                        fill="#606060" />
+                                </svg>
+                            </a>
+                            <!-- ----------------------------- -->
+                        </div>
+                    </td>
+                    <td>Alfreds Futterkiste</td>
+                    <td>124</td>
+                    <!-- ----------------------------- -->
+                    <td class="boolean_icons-td">
+                        <div class="boolean_icons-wrapper">
+                            <svg width="25" height="25" viewBox="0 0 25 25" fill="none"
+                                xmlns="http://www.w3.org/2000/svg">
+                                <path
+                                    d="M11.1568 19.0218L21.0932 9.08538C21.2982 8.88039 21.4007 8.63765 21.4007 8.35714C21.4007 8.07663 21.2982 7.83389 21.0932 7.6289L19.4425 5.97823C19.2375 5.77325 18.9948 5.67076 18.7143 5.67076C18.4338 5.67076 18.191 5.77325 17.986 5.97823L10.4286 13.5357L7.01393 10.1211C6.80895 9.91611 6.5662 9.81361 6.2857 9.81361C6.00519 9.81361 5.76245 9.91611 5.55746 10.1211L3.90679 11.7718C3.70181 11.9767 3.59931 12.2195 3.59931 12.5C3.59931 12.7805 3.70181 13.0232 3.90679 13.2282L9.70032 19.0218C9.9053 19.2267 10.148 19.3292 10.4286 19.3292C10.7091 19.3292 10.9518 19.2267 11.1568 19.0218ZM24.9286 4.73214V20.2679C24.9286 21.5517 24.4727 22.6495 23.5611 23.5611C22.6494 24.4727 21.5517 24.9286 20.2678 24.9286H4.73213C3.44827 24.9286 2.35052 24.4727 1.43888 23.5611C0.527233 22.6495 0.0714111 21.5517 0.0714111 20.2679V4.73214C0.0714111 3.44829 0.527233 2.35054 1.43888 1.43889C2.35052 0.527249 3.44827 0.0714264 4.73213 0.0714264H20.2678C21.5517 0.0714264 22.6494 0.527249 23.5611 1.43889C24.4727 2.35054 24.9286 3.44829 24.9286 4.73214Z"
+                                    fill="#2E6EA9" />
+                            </svg>
+                        </div>
+                    </td>
+                    <!-- ----------------------------- -->
+                    <td class="boolean_icons-td">
+                        <div class="boolean_icons-wrapper">
+                            <svg width="33" height="33" viewBox="0 0 33 33" fill="none"
+                                xmlns="http://www.w3.org/2000/svg">
+                                <path
+                                    d="M26.8127 4.125H6.18768C5.64084 4.12554 5.11655 4.34301 4.72987 4.72969C4.34319 5.11637 4.12572 5.64066 4.12518 6.1875V26.8125C4.12572 27.3593 4.3432 27.8836 4.72987 28.2703C5.11655 28.657 5.64084 28.8745 6.18768 28.875H26.8127C27.3595 28.8745 27.8838 28.657 28.2705 28.2703C28.6572 27.8836 28.8746 27.3593 28.8752 26.8125V6.1875C28.8746 5.64066 28.6572 5.11637 28.2705 4.72969C27.8838 4.34301 27.3595 4.12554 26.8127 4.125ZM21.3543 19.8959C21.4502 19.9916 21.5263 20.1053 21.5783 20.2304C21.6302 20.3556 21.657 20.4897 21.6571 20.6252C21.6572 20.7607 21.6305 20.8949 21.5787 21.0201C21.5269 21.1453 21.4509 21.2591 21.3551 21.3549C21.2593 21.4507 21.1455 21.5267 21.0203 21.5785C20.8951 21.6304 20.7609 21.657 20.6254 21.6569C20.4899 21.6568 20.3557 21.6301 20.2306 21.5781C20.1055 21.5262 19.9918 21.45 19.8961 21.3541L16.5002 17.9583L13.1043 21.3541C12.9109 21.5472 12.6487 21.6555 12.3754 21.6554C12.1021 21.6552 11.8401 21.5466 11.6468 21.3533C11.4536 21.1601 11.345 20.8981 11.3448 20.6248C11.3447 20.3515 11.453 20.0893 11.6461 19.8959L15.0419 16.5L11.6461 13.1041C11.453 12.9107 11.3447 12.6485 11.3448 12.3752C11.345 12.1019 11.4536 11.8399 11.6468 11.6466C11.8401 11.4534 12.1021 11.3448 12.3754 11.3446C12.6487 11.3445 12.9109 11.4528 13.1043 11.6459L16.5002 15.0417L19.8961 11.6459C20.0895 11.4528 20.3517 11.3445 20.625 11.3446C20.8982 11.3448 21.1603 11.4534 21.3535 11.6466C21.5468 11.8399 21.6554 12.1019 21.6555 12.3752C21.6557 12.6485 21.5473 12.9107 21.3543 13.1041L17.9584 16.5L21.3543 19.8959Z"
+                                    fill="#D33B3B" />
+                            </svg>
+                        </div>
+                    </td>
+                    <!-- ----------------------------- -->
+                </tr>
+                <!-- ----------------------------- -->
+            </tbody>
+            <!-- ----------------------------- -->
+        </table>
+
+    </div>
+</div>
+
+{% endblock main %}
+
+
+
+{% block javascripts %}{% endblock javascripts %}

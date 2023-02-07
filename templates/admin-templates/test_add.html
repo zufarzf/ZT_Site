@@ -1,0 +1,117 @@
+{% extends 'admin-templates/admin_base_template/base.html' %}
+
+{% block head %}{% endblock head %}
+
+
+{% block header %}
+<div class="header_wrapper">
+    <a href="" class="logotype_conteiner">
+        <img src="{{ url_for('static', filename='admin-static/logotype/header-logotype.png') }}" alt="ZT"
+            class="logotype_img">
+    </a>
+
+    <div class="admin-menu_wrapper">
+        <nav class="admin-nav  header-admin-nav">
+            <a href="{{ url_for('subjects_list') }}" class="admin-nav-item">Fanlar</a>
+            <a href="{{ url_for('users') }}" class="admin-nav-item">Foydalanuvchilar</a>
+            <a href="{{ url_for('tests_list') }}" class="admin-nav-item activate_page">Testlar</a>
+        </nav>
+        <a href="{{ url_for('logout') }}" class="admin-header_btn">Chiqish</a>
+    </div>
+
+</div>
+<nav class="admin-nav header-admin-nav min_screen">
+    <a href="{{ url_for('subjects_list') }}" class="admin-nav-item">Fanlar</a>
+    <a href="" class="admin-nav-item">Foydalanuvchilar</a>
+    <a href="#" class="admin-nav-item activate_page">Testlar</a>
+</nav>
+{% endblock header %}
+<!-- ===================================== -->
+
+<!-- ===================================== -->
+{% block main %}
+
+<nav class="main-navbar">
+    <a href="{{ url_for('tests_list') }}" class="main-navbar-item admin-nav-item">List</a>
+    <a href="#" class="main-navbar-item admin-nav-item  activate_page">Add</a>
+</nav>
+
+<div class="form_wrapper">
+    <form action="{{ url }}" method="post">
+        {{ form.hidden_tag() }}
+        <!-- ========================================= -->
+        <div class="form-select_wrapper">
+            <!-- ------------------------------------- -->
+            {{ form.subjects(class="form-select") }}
+            <!-- ------------------------------------- -->
+        </div>
+        <!-- ========================================= -->
+        <label class="label-input">
+            <span>Savol</span>
+            {{ form.body() }}
+        </label>
+        <!-- ========================================= -->
+        <label class="label-input">
+            <span>Togri javob</span>
+            {{ form.body_1() }}
+        </label>
+        <!-- ========================================= -->
+        <label class="label-input">
+            <span>Notog'ri javob - 1</span>
+            {{ form.body_2() }}
+        </label>
+        <!-- ========================================= -->
+        <label class="label-input">
+            <span>Notog'ri javob - 2</span>
+            {{ form.body_3() }}
+        </label>
+        <!-- ========================================= -->
+        <label class="label-input">
+            <span>Notog'ri javob - 3</span>
+            {{ form.body_4() }}
+        </label>
+        <!-- ========================================= -->
+
+
+
+        <style>
+            span {
+                margin: 15px;
+            }
+
+            label.label-input {
+                flex-direction: column;
+                cursor: default;
+            }
+
+            .form-select_wrapper {
+                margin: 18px;
+            }
+
+            .form-select {
+                min-width: 150px;
+                height: 40px;
+                border-radius: 7px;
+                font-size: 20px;
+            }
+        </style>
+        <!-- ========================================= -->
+        <div class="form-btns_wrapper">
+            {{ form.submit(class="form-btn save-btn", value="Qoshish") }}
+            <a href="{{ url_for('tests_list') }}" class="form-btn cansel-btn">Bekor</a>
+        </div>
+        <!-- ========================================= -->
+    </form>
+    {{ ckeditor.load() }}
+    {{ ckeditor.config(name='body') }}
+    {{ ckeditor.config(name='body_1') }}
+    {{ ckeditor.config(name='body_2') }}
+    {{ ckeditor.config(name='body_3') }}
+    {{ ckeditor.config(name='body_4') }}
+</div>
+
+
+{% endblock main %}
+
+
+{% block javascripts %}{% endblock javascripts %}
