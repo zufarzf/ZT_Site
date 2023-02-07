@@ -55,7 +55,7 @@ CKEDITOR_UPLOAD_ERROR_MESSAGE = 'Error'
 CKEDITOR_ENABLE_CSRF = True
 
 
-SQLALCHEMY_DATABASE_URI = 'sqlite:///data.db'
+SQLALCHEMY_DATABASE_URI = 'mysql+pymysql://root:MySQL.root.33@localhost:3306/zt_data'
 DEBUG = True
 
 
@@ -1348,4 +1348,4 @@ def logout():
 
 
 if __name__ == '__main__':
-    app.run()
+    app.run(host='0.0.0.0')
