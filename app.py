@@ -59,7 +59,7 @@ SQLALCHEMY_DATABASE_URI = 'mysql+pymysql://root:MySQL.root.33@localhost:3306/zt_
 DEBUG = True
 
 
-app = Flask(__name__)
+app = Flask(__name__, template_folder='all-templates', static_folder='all-statics')
 app.config.from_object(__name__)
 # --------------------
 db = SQLAlchemy(app)
