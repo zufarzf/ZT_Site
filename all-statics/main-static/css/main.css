@@ -3,7 +3,6 @@
     margin: 0;
     padding: 0;
     font-family: sans-serif;
-    color: #dcf1fc;
 }
 
 li{
@@ -47,6 +46,11 @@ a{
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
+    color: #fff;
+}
+
+.main_block a{
+    color: #fff;
 }
 
 .footer{

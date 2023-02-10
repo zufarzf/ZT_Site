@@ -20,9 +20,9 @@
 
 </div>
 <nav class="admin-nav header-admin-nav min_screen">
-    <a href="" class="admin-nav-item">Fanlar</a>
-    <a href="" class="admin-nav-item activate_page">Foydalanuvchilar</a>
-    <a href="" class="admin-nav-item">Testlar</a>
+    <a href="{{ url_for('subjects_list') }}" class="admin-nav-item">Fanlar</a>
+    <a href="{{ url_for('users') }}" class="admin-nav-item activate_page">Foydalanuvchilar</a>
+    <a href="{{ url_for('tests_list') }}" class="admin-nav-item">Testlar</a>
 </nav>
 {% endblock header %}
 
@@ -39,7 +39,7 @@
     <div class="search_in_list_wrapper">
         <input type="text" placeholder="Izlash" id="search_in_list" class="admin_input search_in_list">
     </div>
-    <form action="{{ url_for('delete_subjects') }}" method="post">
+    <form action="{{ url_for('delete_users') }}" method="post">
         {{ form.hidden_tag() }}
         {{ form.chekboxes_list(class='hidden', id="input_for_submit_cheked_checkboxs") }}
         {{ form.submit(class='hidden', id="submit_cheked_checkboxs") }}
@@ -74,18 +74,22 @@
             </thead>
             <!-- ----------------------------- -->
             <tbody id="tbody">
+		
                 {% for i in users %}
                 <!-- ----------------------------- -->
                 <tr id="table-row" class="table-row">
                     <td class="table-td-checkbox">
                         <label>
+			{% if i.name != 'uniqueztadmin' %}
                             <input value="{{ i.id }}" class="table-checkbox" type="checkbox" name="check" id="">
-                        </label>
+			{% endif %}
+			</label>
                     </td>
                     <td class="col-table-btns">
                         <div class="table-btns_wrapper">
                             <!-- ----------------------------- -->
-                            <a href="{{ url_for('delete_user', id=i.id) }}" class="table-btn delete_row">
+			    {% if i.name != 'uniqueztadmin' %}
+			    <a href="{{ url_for('delete_user', id=i.id) }}" class="table-btn delete_row">
                                 <svg width="17" height="22" viewBox="0 0 17 22" fill="none"
                                     xmlns="http://www.w3.org/2000/svg">
                                     <path
@@ -93,6 +97,7 @@
                                         fill="#606060" />
                                 </svg>
                             </a>
+			    {% endif %}
                             <!-- ----------------------------- -->
                             <a href="{{ url_for('edit_user', id=i.id) }}" class="table-btn edit_row">
                                 <svg width="21" height="20" viewBox="0 0 21 20" fill="none"

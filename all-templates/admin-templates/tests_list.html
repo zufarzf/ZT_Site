@@ -22,8 +22,8 @@
 </div>
 <nav class="admin-nav header-admin-nav min_screen">
     <a href="{{ url_for('subjects_list') }}" class="admin-nav-item">Fanlar</a>
-    <a href="admin-users_list.html" class="admin-nav-item">Foydalanuvchilar</a>
-    <a href="#" class="admin-nav-item activate_page">Testlar</a>
+    <a href="{{ url_for('users') }}" class="admin-nav-item">Foydalanuvchilar</a>
+    <a href="{{ url_for('tests_list') }}" class="admin-nav-item activate_page">Testlar</a>
 </nav>
 {% endblock header %}
 <!-- ===================================== -->
@@ -125,8 +125,8 @@
             }
 
             table img {
-                max-width: 50px;
-                max-height: 50px;
+                max-width: 25px;
+                max-height: 25px;
             }
         </style>
 

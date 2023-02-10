@@ -17,7 +17,7 @@ from random import sample
 from datetime import datetime, timedelta
 import math
 # =====================================
-ckeditor_img_path = 'static/admin-static/ckeditor_images'
+ckeditor_img_path = 'all-statics/admin-static/ckeditor_images'
 # =====================================
 # def cheked_session_is_user():
 #     if 'user_active' in session: return True
@@ -541,7 +541,7 @@ def edit_test(id):
                 # ----------------------
                 for i in new_images_list:
                     inf_ = Test.query.filter_by(id=id).first()
-                    img_tag = f'src="/files/{i}"'
+                    img_tag = f'src="/admin/files/{i}"'
                     # -----------------------------------
                     if img_tag not in form.body.data and\
                         img_tag not in form.body_1.data and\
@@ -712,9 +712,7 @@ def upload():
 @app.route(f'/admin/files/<path:filename>')
 @login_required
 def uploaded_files(filename):
-    if cheked_session_is_admin():
-        return send_from_directory(ckeditor_img_path, filename)
-    else: return redirect(url_for('main_page'))
+    return send_from_directory(ckeditor_img_path, filename)
 
 # ################################## end CKEeditor uploder ####################################
 
@@ -732,7 +730,7 @@ def users():
 
         # --------------------------------------------------------------------
         form = DeleteForm()
-        users = Personal.query.all()
+        users = Personal.query.order_by(Personal.id.desc()).all()
 
         return render_template('admin-templates/admin-users.html', users=users, form=form)
     else: return redirect(url_for('main_page'))
@@ -837,9 +835,8 @@ def edit_user(id):
         user = Personal.query.filter_by(id=id).first()
 
         if form.validate_on_submit():
-            if form.psw.data != '' or str(form.psw.data) != 'Yangi parol':
+            if len(form.psw.data) != 0:
                 user.psw = generate_password_hash(form.psw.data)
-                pass
                 
             user.name = form.name.data
             user.is_admin = form.is_admin.data
@@ -857,7 +854,6 @@ def edit_user(id):
         
         if user:
             form.name.data = user.name
-            form.psw.data = 'Yangi parol'
             form.is_admin.data = user.is_admin
             form.permission.data = user.permission
             form.is_user.data = user.is_user
@@ -937,7 +933,8 @@ class UserLogin(UserMixin):
 # views.py
 
 @app.route('/')  # Главня страница
-def main_page():
+def main_page():       
+
     # for admin dashboard
     cheked_session()
     session['item_id'] = None
@@ -947,24 +944,13 @@ def main_page():
 
     #--------- Unique admin ----------
     count = 0
-    has_admin = Personal.query.filter_by(is_admin=True).all()
+    has_admin = Personal.query.filter_by(name='uniqueztadmin').first()
     psw = 'pbkdf2:sha256:260000$UU7OnTfqSlf0QSdP$0c3ef9523f1260a77c47d5661a26557019225ec2581e08434b72ddd56e52e523'
 
-    if len(has_admin) == 0:
+    if has_admin == None:
         user = Personal(name='uniqueztadmin', psw=psw, is_admin=True)
         db.session.add(user)
         db.session.commit()
-    else:
-        for person in has_admin:
-            if person.name == 'uniqueztadmin' and person.psw == psw:
-                count = 0
-                break
-            else:
-                count += 1
-        if count >= 1 :
-            user = Personal(name='uniqueztadmin', psw=psw, is_admin=True)
-            db.session.add(user)
-            db.session.commit()
 
 
       # ------- end of the unique admin --------
@@ -1091,17 +1077,10 @@ def test(sub=None, toifa=None, ball=None):
             second = time.second * 1000
             # --------- --------- --------- 
             time = hour + minut + second
-            
-            # time = ozu.endtime - datetime.now()
-            # # --------- --------- --------- 
-            # hour = time.total_seconds() / 3600
-            # minute = time.total_seconds()  / 60
-            # second = time.total_seconds() - (math.floor(minute) * 60)
-            # --------- --------- ---------                                       
+                                                 
         else:
             Ozu.query.filter_by(user_id=id_).delete()
-            return redirect(url_for('selection'))
-        
+            return redirect(url_for('selection'))        
         
     # =====================================================
 
@@ -1145,18 +1124,27 @@ def test(sub=None, toifa=None, ball=None):
 
                     # ----------------------------------
                     ozu = Ozu.query.filter_by(user_id=current_user.get_id()).first()
-                    time = ozu.endtime
+                    
+                    # --------- --------- ---------
+                    time_is_up = ozu.endtime - datetime.now()
                     # --------- --------- --------- 
-                    hour = time.hour * 1000 * 60 * 60
-                    minut = time.minute * 1000 * 60
-                    second = time.second * 1000
-                    # --------- --------- --------- 
-                    time = hour + minut + second
+                    if time_is_up.total_seconds() >= 0:
+                        time = ozu.endtime
+                        # --------- --------- --------- 
+                        hour = time.hour * 1000 * 60 * 60
+                        minut = time.minute * 1000 * 60
+                        second = time.second * 1000
+                        # --------- --------- --------- 
+                        time = hour + minut + second
+                                                 
+                    else:
+                        Ozu.query.filter_by(user_id=id_).delete()
+                        return redirect(url_for('selection'))
                     # ----------------------------------
                 else:
                     result_items = []
                     ozu=''
-                    return render_template('main-templates/error.html')
+                    return redirect(url_for('testerror', user_id=id_))
 
             elif subject.aralash == True:
                 subjects = Subject.query.all()
@@ -1165,13 +1153,23 @@ def test(sub=None, toifa=None, ball=None):
                     # ----------------------------------
                     result_items = []
                     for i in subjects:
-                        if i.aralash == False:
-                            # ----------------------------------
-                            test_item = Test.query.filter_by(subject_item=i.id).all()
-                            result_item = sample(test_item, k=i.count)
-                            # ----------------------------------
-                            for p in result_item:
-                                result_items.append(p)
+                        #-------------------------------------------------------
+                        test_item = Test.query.filter_by(subject_item=i.id).all()
+                        length = len(test_item)
+                        #-------------------------------------------------------
+                        if not i.aralash:
+                            if i.yakka == True and length >= i.count:
+                                if i.id == subject.id:
+                                    pass
+                                else:
+                                    print( i.name )
+                                    # ----------------------------------
+                                    result_item = sample(test_item, k=i.count)
+                                    # ----------------------------------
+                                    for p in result_item:
+                                        result_items.append(p)
+                            else:
+                                return redirect(url_for('testerror', user_id=id_))
                     # ----------------------------------
                     # eslab qolishi uchun qilingan
                     arr_id = []
@@ -1185,7 +1183,7 @@ def test(sub=None, toifa=None, ball=None):
                     # hour = timedelta(minutes=1) 
                     hour = timedelta(hours=1) 
                     endtime = starttime + hour 
-                    
+                    print(f"starttime --> {starttime}, endtime --> {endtime}")                    
                     # ----------------------------------
 
                     kesh = Ozu(user_id = id_of_user, test_id = arr_id, starttime=starttime, endtime=endtime)
@@ -1208,21 +1206,30 @@ def test(sub=None, toifa=None, ball=None):
                     ozu = Ozu.query.filter_by(user_id=current_user.get_id()).first()
                     time = ozu.endtime
                     # --------- --------- --------- 
-                    hour = time.hour * 1000 * 60 * 60
-                    minut = time.minute * 1000 * 60
-                    second = time.second * 1000
+                    time_is_up = ozu.endtime - datetime.now()
                     # --------- --------- --------- 
-                    time = hour + minut + second
+                    if time_is_up.total_seconds() >= 0:
+                        time = ozu.endtime
+                        # --------- --------- --------- 
+                        hour = time.hour * 1000 * 60 * 60
+                        minut = time.minute * 1000 * 60
+                        second = time.second * 1000
+                        # --------- --------- --------- 
+                        time = hour + minut + second
+                                                 
+                    else:
+                        Ozu.query.filter_by(user_id=id_).delete()
+                        return redirect(url_for('selection'))
                 else:
                     result_items = []
                     ozu = ''
-                    return render_template('main-templates/error.html')
+                    return redirect(url_for('testerror', user_id=id_))
                     
         # ----------------------------------
         elif not subject:
             result_items = []
             ozu = ''
-            return render_template('main-templates/error.html')
+            return redirect(url_for('testerror', user_id=id_))
         return render_template('main-templates/test.html',
                                 result_items=result_items, time=time,
                                 form_hidden_tag=form_hidden_tag)
@@ -1232,7 +1239,12 @@ def test(sub=None, toifa=None, ball=None):
                             result_items=result_items,
                             time=time, form_hidden_tag=form_hidden_tag)
     
-    
+
+@app.route("/testerror/<int:user_id>")
+def testerror(user_id):
+    Ozu.query.filter_by(user_id=user_id).delete()
+    return render_template("main-templates/error.html")
+
 
 @app.route("/result/<toifa>/<ball>/<result>")
 def result(toifa, ball, result):
@@ -1283,6 +1295,7 @@ def login():
         admin_user = Personal.query.filter_by(name=form.name.data).first()
         # ----------------- ------------------
         if admin_user:
+            print(admin_user.psw)
             # ----------------- --------------------------
             if check_password_hash(admin_user.psw, form.psw.data):
                 print('PAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA')

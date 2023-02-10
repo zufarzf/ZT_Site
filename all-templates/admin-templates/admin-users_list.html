@@ -21,9 +21,9 @@
 
 </div>
 <nav class="admin-nav header-admin-nav min_screen">
-    <a href="" class="admin-nav-item">Fanlar</a>
-    <a href="" class="admin-nav-item activate_page">Foydalanuvchilar</a>
-    <a href="" class="admin-nav-item">Testlar</a>
+    <a href="{{ url_for('subjects_list') }}" class="admin-nav-item">Fanlar</a>
+    <a href="{{ url_for('users') }}" class="admin-nav-item activate_page">Foydalanuvchilar</a>
+    <a href="{{ url_for('tests_list') }}" class="admin-nav-item">Testlar</a>
 </nav>
 {% endblock header %}
 <!-- ===================================== -->

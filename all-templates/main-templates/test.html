@@ -28,10 +28,11 @@
             {% if result_items != [] %}
             <form method="post" action="" id="testForm" name="testForm">
                 {{ form_hidden_tag.hidden_tag() }}
+		
                 {% for i in result_items %}
                 <div id="test_items_with_timer" class="test_item">
-                    <div class="question">
-                        <p>{{ i['ques'] |safe }}</p>
+		    <div class="question">
+			<p{{ count }} >{{ i['ques'] |safe }}</p>
                     </div>
                     <!-- <hr> -->
                     <div class="seperate"></div>
@@ -48,7 +49,9 @@
                     </div>
                 </div>
                 <div class="sep_test"></div>
-                {% endfor %}
+		
+		{% endfor %}
+		
 
                 <button class="form_btn">Yakunlash</button>
             </form>
@@ -59,6 +62,7 @@
     </div>
 
     <input style="display: none;" type="text" id="time" value="{{ time }}">
+    
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
     <script>
@@ -81,8 +85,8 @@
             const minute = new Date().getMinutes() * 1000 * 60;
             const seconds = new Date().getSeconds() * 1000;
             // ------- -------- -------
-            const nowTime = hour + minute + seconds;
-
+            const nowTimes = hour + minute + seconds;
+	    const nowTime = nowTimes - 18000000
             // Проверят остаток времени
             const gap = Number(time.value) - nowTime;
 
