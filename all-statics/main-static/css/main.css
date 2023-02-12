@@ -267,3 +267,9 @@ a{
 .error_items h1, h4, strong{
     color: #000e33;
 }
+
+.messages{
+    background-color: #FFA07A;
+    color: #8B0000;
+    padding: 5px 10px;
+}

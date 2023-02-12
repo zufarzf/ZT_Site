@@ -74,8 +74,7 @@ manager = LoginManager(app)
 def load_user(user_id):
     return UserLogin().fromDB(user_id)
 
-
-
+manager.login_view = 'login'
 
 
 
@@ -933,8 +932,18 @@ class UserLogin(UserMixin):
 # views.py
 
 @app.route('/')  # Главня страница
-def main_page():       
+def main_page():
 
+    # --------------------------
+    if current_user.get_id and 'toifa' in session:
+        id_of_user = current_user.get_id()
+        testing_user = Ozu.query.filter_by(user_id=id_of_user)
+        print( session['sub'] )
+        if testing_user:
+            flash( "Testdan chiqish uchun Yakunlash tugmasini bosing!" )
+            return redirect( url_for( 'test', sub=session['sub'], toifa=session['toifa'], ball=session['ball'] ) )
+    # --------------------------
+    
     # for admin dashboard
     cheked_session()
     session['item_id'] = None
@@ -961,6 +970,16 @@ def main_page():
 @app.route("/register", methods=['POST', 'GET'])
 def register():
     cheked_session()
+    
+    # --------------------------
+    if current_user.get_id and 'toifa' in session:
+        id_of_user = current_user.get_id()
+        testing_user = Ozu.query.filter_by(user_id=id_of_user)
+        if testing_user:
+            flash( "Testdan chiqish uchun Yakunlash tugmasini bosing!" )
+            return redirect( url_for( 'test', sub=session['sub'], toifa=session['toifa'], ball=session['ball'] ) )
+    # --------------------------
+
     form = RegisterForm()
     if form.validate_on_submit():
 
@@ -1002,6 +1021,17 @@ def register():
 def selection():
     cheked_session()
     # --------------------------
+    id_of_user = current_user.get_id()
+
+    # --------------------------
+    if current_user.get_id and 'toifa' in session:
+        id_of_user = current_user.get_id()
+        testing_user = Ozu.query.filter_by(user_id=id_of_user)
+        if testing_user:
+            flash( "Testdan chiqish uchun Yakunlash tugmasini bosing!" )
+            return redirect( url_for( 'test', sub=session['sub'], toifa=session['toifa'], ball=session['ball'] ) )
+    # --------------------------
+    
     subject = Subject.query.all()
     select = ToifaForm()
     select.subject.choices = [
@@ -1027,6 +1057,10 @@ def selection():
 @app.route("/test/<sub>/<toifa>/<ball>", methods=['POST', 'GET'])
 @login_required
 def test(sub=None, toifa=None, ball=None):
+    session['sub'] = sub
+    session['toifa'] = toifa
+    session['ball'] = ball
+
     cheked_session()
     form_hidden_tag = UserEditForm()
     # --------------------------
@@ -1159,17 +1193,14 @@ def test(sub=None, toifa=None, ball=None):
                         #-------------------------------------------------------
                         if not i.aralash:
                             if i.yakka == True and length >= i.count:
-                                if i.id == subject.id:
-                                    pass
-                                else:
-                                    print( i.name )
-                                    # ----------------------------------
-                                    result_item = sample(test_item, k=i.count)
-                                    # ----------------------------------
-                                    for p in result_item:
-                                        result_items.append(p)
+                                # ----------------------------------
+                                result_item = sample(test_item, k=i.count)
+                                # ----------------------------------
+                                for p in result_item:
+                                    result_items.append(p)
                             else:
                                 return redirect(url_for('testerror', user_id=id_))
+                            
                     # ----------------------------------
                     # eslab qolishi uchun qilingan
                     arr_id = []
@@ -1242,7 +1273,13 @@ def test(sub=None, toifa=None, ball=None):
 
 @app.route("/testerror/<int:user_id>")
 def testerror(user_id):
+    # --------------------------
+    del session['sub']
+    del session['toifa']
+    del session['ball']
+    # --------------------------
     Ozu.query.filter_by(user_id=user_id).delete()
+    db.session.commit()
     return render_template("main-templates/error.html")
 
 
@@ -1250,19 +1287,23 @@ def testerror(user_id):
 def result(toifa, ball, result):
     cheked_session()
     # --------------------------
+    del session['sub']
+    del session['toifa']
+    del session['ball']
+    # --------------------------
     ball = int(ball) + int(result)
     result = True
 
-    if toifa == 'oliy_toifa' and int(ball) <= 80:
+    if toifa == 'oliy_toifa' and int(ball) >= 80:
         result = True
 
-    elif toifa == '1-toifa' and int(ball) <= 75 and int(ball) >= 65:
+    elif toifa == '1-toifa' and int(ball) <= 79 and int(ball) >= 70:
         result = True
 
-    elif toifa == '2-toifa' and int(ball) <= 65 and int(ball) >= 60:
+    elif toifa == '2-toifa' and int(ball) <= 69 and int(ball) >= 60:
         result = True
     
-    elif int(ball) <= 60 and int(ball) >=55:
+    elif int(ball) <= 59 and int(ball) >=55:
         result = "Tabriklaymiz! mutaxassislikni saqlab qoldingiz"
     
     else:
@@ -1277,6 +1318,14 @@ def result(toifa, ball, result):
 @app.route("/login/", methods=['POST', 'GET'])
 def login():
     cheked_session()
+    # --------------------------
+
+    if current_user.get_id and 'toifa' in session:
+        id_of_user = current_user.get_id()
+        testing_user = Ozu.query.filter_by(user_id=id_of_user)
+        if testing_user:
+            flash( "Testdan chiqish uchun Yakunlash tugmasini bosing!" )
+            return redirect( url_for( 'test', sub=session['sub'], toifa=session['toifa'], ball=session['ball'] ) )
     # --------------------------
     if current_user.get_id:
         idp = current_user.get_id()
@@ -1337,6 +1386,14 @@ def login():
 @app.route('/logout')
 def logout():
     cheked_session()
+    # --------------------------
+    if current_user.get_id and 'toifa' in session:
+        id_of_user = current_user.get_id()
+        testing_user = Ozu.query.filter_by(user_id=id_of_user)
+        if testing_user:
+            flash( "Testdan chiqish uchun Yakunlash tugmasini bosing!" )
+            return redirect( url_for( 'test', sub=session['sub'], toifa=session['toifa'], ball=session['ball'] ) )
+    # --------------------------
     if 'admin_active' in session: del session['admin_active']
     # --------------------------
     logout_user()

@@ -18,6 +18,13 @@
                     <a href="{{ url_for('main_page') }}">Asosiy sahifa</a>
                 </div>
             </div>
+	    {% if get_flashed_messages %}
+	    <div class='messages'>
+		{% for i in get_flashed_messages() %}
+                    {{ i }}
+                {% endfor %}
+	    </div>
+	    {% endif %}
             <div class="timer">
                 <span id="hrs"></span>:<span id="min"></span>:<span id="sec"></span>
             </div>
