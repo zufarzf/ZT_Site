@@ -273,3 +273,7 @@ a{
     color: #8B0000;
     padding: 5px 10px;
 }
+
+.question{
+    display: flex;
+}

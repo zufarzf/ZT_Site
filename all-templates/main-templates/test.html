@@ -39,7 +39,10 @@
                 {% for i in result_items %}
                 <div id="test_items_with_timer" class="test_item">
 		    <div class="question">
-			<p{{ count }} >{{ i['ques'] |safe }}</p>
+			<p>{{ result_items.index(i) + 1 }}.</p>
+			<div class='answ'>
+			    <p>{{ i['ques'] |safe }}</p>
+			</div>
                     </div>
                     <!-- <hr> -->
                     <div class="seperate"></div>

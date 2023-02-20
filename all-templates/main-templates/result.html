@@ -2,20 +2,6 @@
 {% block main %}
 <div class="result_main-block">
     <div class="results">
-        {% if result == True %}
-        <div class="toifa-success">
-            Siz toifangizni saqlab qoldingiz!
-        </div>
-        {% elif result == False %}
-        <div class="toifa-unsuc">
-            Toifangizni saqlab qola olmadingiz!
-        </div>
-        {% else %}
-        <div class="toifa-success">
-            {{ result }}
-        </div>
-        {% endif %}
-
         <div class="ball">
             Sizning umumiy balingiz: {{ ball }}
         </div>

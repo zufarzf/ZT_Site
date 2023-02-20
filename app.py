@@ -931,13 +931,25 @@ class UserLogin(UserMixin):
 #------------------------------------------------------------------
 # views.py
 
+def check_ozu():
+    if current_user.get_id:
+        # ---------------------------------
+        id_of_user = current_user.get_id()
+        testing_user = Ozu.query.filter_by(user_id=id_of_user).first()
+        if testing_user:
+            testing_user.endtime < datetime.now()
+            # ---------------------------------
+            db.session.delete(testing_user)
+    else: pass
+
 @app.route('/')  # Главня страница
 def main_page():
+    check_ozu()
 
     # --------------------------
     if current_user.get_id and 'toifa' in session:
         id_of_user = current_user.get_id()
-        testing_user = Ozu.query.filter_by(user_id=id_of_user)
+        testing_user = Ozu.query.filter_by(user_id=id_of_user).first()
         print( session['sub'] )
         if testing_user:
             flash( "Testdan chiqish uchun Yakunlash tugmasini bosing!" )
@@ -969,12 +981,13 @@ def main_page():
 
 @app.route("/register", methods=['POST', 'GET'])
 def register():
+    check_ozu()
     cheked_session()
     
     # --------------------------
     if current_user.get_id and 'toifa' in session:
         id_of_user = current_user.get_id()
-        testing_user = Ozu.query.filter_by(user_id=id_of_user)
+        testing_user = Ozu.query.filter_by(user_id=id_of_user).first()
         if testing_user:
             flash( "Testdan chiqish uchun Yakunlash tugmasini bosing!" )
             return redirect( url_for( 'test', sub=session['sub'], toifa=session['toifa'], ball=session['ball'] ) )
@@ -1019,6 +1032,7 @@ def register():
 @app.route("/selection", methods=['POST', 'GET'])
 @login_required
 def selection():
+    check_ozu()
     cheked_session()
     # --------------------------
     id_of_user = current_user.get_id()
@@ -1026,7 +1040,7 @@ def selection():
     # --------------------------
     if current_user.get_id and 'toifa' in session:
         id_of_user = current_user.get_id()
-        testing_user = Ozu.query.filter_by(user_id=id_of_user)
+        testing_user = Ozu.query.filter_by(user_id=id_of_user).first()
         if testing_user:
             flash( "Testdan chiqish uchun Yakunlash tugmasini bosing!" )
             return redirect( url_for( 'test', sub=session['sub'], toifa=session['toifa'], ball=session['ball'] ) )
@@ -1273,6 +1287,7 @@ def test(sub=None, toifa=None, ball=None):
 
 @app.route("/testerror/<int:user_id>")
 def testerror(user_id):
+    check_ozu()
     # --------------------------
     del session['sub']
     del session['toifa']
@@ -1285,6 +1300,7 @@ def testerror(user_id):
 
 @app.route("/result/<toifa>/<ball>/<result>")
 def result(toifa, ball, result):
+    check_ozu()
     cheked_session()
     # --------------------------
     del session['sub']
@@ -1322,7 +1338,7 @@ def login():
 
     if current_user.get_id and 'toifa' in session:
         id_of_user = current_user.get_id()
-        testing_user = Ozu.query.filter_by(user_id=id_of_user)
+        testing_user = Ozu.query.filter_by(user_id=id_of_user).first()
         if testing_user:
             flash( "Testdan chiqish uchun Yakunlash tugmasini bosing!" )
             return redirect( url_for( 'test', sub=session['sub'], toifa=session['toifa'], ball=session['ball'] ) )
@@ -1385,11 +1401,12 @@ def login():
 
 @app.route('/logout')
 def logout():
+    check_ozu()
     cheked_session()
     # --------------------------
     if current_user.get_id and 'toifa' in session:
         id_of_user = current_user.get_id()
-        testing_user = Ozu.query.filter_by(user_id=id_of_user)
+        testing_user = Ozu.query.filter_by(user_id=id_of_user).first()
         if testing_user:
             flash( "Testdan chiqish uchun Yakunlash tugmasini bosing!" )
             return redirect( url_for( 'test', sub=session['sub'], toifa=session['toifa'], ball=session['ball'] ) )
