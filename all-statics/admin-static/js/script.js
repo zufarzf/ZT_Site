@@ -2,8 +2,6 @@ $("#select_all").click(function () {
     $(':checkbox').prop('checked', this.checked);
 });
 
-
-
 $('#delete-btn').on('click', function (e) {
     e.preventDefault();
     // selecting all checkboxes

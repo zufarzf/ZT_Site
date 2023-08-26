@@ -239,8 +239,8 @@ a{
     align-items: center;
     max-width: 800px;
     width: 100%;
-    height: 80vh;
-    margin: 0 auto;
+    height: 10vh;
+    margin: 0 auto 30px auto;
     padding: 30px 15px;
 }
 
@@ -248,6 +248,16 @@ a{
     display: flex;
     align-items: center;
     margin-bottom: 15px;
+}
+
+.true_ver{
+    background-color: #8ff58f;
+    color: #031107;
+}
+
+.wrong_ver{
+    background-color: #f3a9a9;
+    color: #110403;
 }
 
 .otherclass{
@@ -276,4 +286,100 @@ a{
 
 .question{
     display: flex;
+}
+
+
+/* test css */
+.test-page__header{
+    width: 100%;
+    border-bottom-left-radius: 10px;
+    border-bottom-right-radius: 10px;
+    box-shadow: 0px 1px 4px #ccc;
+}
+
+.main_header-block{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 20px;
+    margin: 0 auto;
+    width: 80%;
+}
+
+.timer{
+    background-color:rgba(1,136,212, .5);
+    padding: 10px 25px;
+    color: rgba(255, 255, 255);
+    border-radius: 5px;
+    animation-name: 'timer';
+    animation-duration: 1s;
+    transition: .3s;
+}
+
+.article{
+    margin-bottom: 50px;
+}
+
+.test_main-block{
+    width: 100%;
+    padding: 20px;
+    margin-top: 30px;
+}
+
+.test_main-block form{
+    max-width: 800px;
+    width: 100%;
+    margin: 0 auto;
+}
+
+.test_item{
+    background-color: rgb(245, 243, 243);
+}
+
+.seperate{
+    width: 100%;
+    height: 20px;
+    border-bottom-style: 10px;
+    background: #fff;
+}
+.sep_test{
+    height: 7px;
+    border-bottom-style: 10px;
+    background: rgb(170, 170, 170);
+    margin: 30px 0;
+}
+
+.question, .answers{
+    padding: 20px 25px;
+}
+
+.question p{
+    color:rgba(3, 43, 66, 0.7);
+    font-size: 18px;
+    font-weight: 600;
+}
+
+.answers label,
+.answers p{
+    color: rgba(3, 43, 66, 0.7);
+    margin-left: 5px;
+}
+
+button{
+    padding: 10px 15px;
+    outline: none;
+    border: 2px groove #3654A2;
+    color: #223870;
+    background: inherit;
+    border-radius: 3px;
+    font-size: 18px;
+    cursor: pointer;
+    margin-top: 20px;
+    transition: .2s;
+}
+
+button:hover{
+    color:#fff;
+    background-color: #5f8af5;
+    border: 2px groove #5f8af5;
 }

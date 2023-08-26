@@ -56,6 +56,7 @@ CKEDITOR_ENABLE_CSRF = True
 
 
 SQLALCHEMY_DATABASE_URI = 'mysql+pymysql://root:MySQL.root.33@localhost:3306/zt_data'
+SQLALCHEMY_DATABASE_URI = 'sqlite:///data.db'
 DEBUG = True
 
 
@@ -76,6 +77,15 @@ def load_user(user_id):
 
 manager.login_view = 'login'
 
+
+def delete_results():
+    # --------------------------
+    del session['sub']
+    del session['toifa']
+    del session['ball']
+    # --------------------------
+    Result.query.filter_by(user_id=current_user.get_id()).delete()
+    Ozu.query.filter_by(user_id=current_user.get_id()).delete()
 
 
 ############################## MODELS ################################
@@ -106,8 +116,6 @@ class Subject(db.Model):
 
     def __repr__(self):
         return f"<{self.name}>"
-
-
 
 
 
@@ -143,6 +151,15 @@ class Ozu(db.Model):
     starttime = db.Column(db.DateTime())
     endtime = db.Column(db.DateTime())
 
+
+class Result(db.Model):
+    __tablename__ = 'result'
+
+    id = db.Column(db.Integer, primary_key=True)
+    results = db.Column(db.PickleType)
+    user_id = db.Column(db.Integer)
+
+
 ############################## MODELS ################################
 
 
@@ -163,10 +180,6 @@ class SubjectAddForm(FlaskForm):
 class DeleteForm(FlaskForm):
     chekboxes_list = StringField(validators=[DataRequired()])
     submit = SubmitField()
-
-
-
-
 
 
 class CkForm(FlaskForm):
@@ -937,14 +950,22 @@ def check_ozu():
         id_of_user = current_user.get_id()
         testing_user = Ozu.query.filter_by(user_id=id_of_user).first()
         if testing_user:
-            testing_user.endtime < datetime.now()
-            # ---------------------------------
-            db.session.delete(testing_user)
+            if testing_user.endtime < datetime.now():
+                # ---------------------------------
+                db.session.delete(testing_user)
     else: pass
 
 @app.route('/')  # Главня страница
 def main_page():
     check_ozu()
+    # ozu = Ozu.query.all()
+    # result = Result.query.all()
+    # for i in ozu:
+    #     db.session.delete(i)
+    # for j in result:
+    #     db.session.delete(j)
+    
+    # db.session.commit()
 
     # --------------------------
     if current_user.get_id and 'toifa' in session:
@@ -983,6 +1004,8 @@ def main_page():
 def register():
     check_ozu()
     cheked_session()
+    if 'sub' in session:
+        delete_results()
     
     # --------------------------
     if current_user.get_id and 'toifa' in session:
@@ -1032,8 +1055,11 @@ def register():
 @app.route("/selection", methods=['POST', 'GET'])
 @login_required
 def selection():
+    # --------------------------
     check_ozu()
     cheked_session()
+    if 'sub' in session:
+        delete_results()
     # --------------------------
     id_of_user = current_user.get_id()
 
@@ -1088,15 +1114,27 @@ def test(sub=None, toifa=None, ball=None):
             result_items = []
             # ----------------------------------
             result = 0
+            result_test_items = []
             for item in tests:
+                items = {'test': '',
+                         'answer': ''}
                 # ----------------------------------
                 test_item = Test.query.filter_by(id=int(item)).first()
                 answer = request.form.get(f"{test_item.id}")
+                # -----------------------------------
+                items['test'] = test_item
+                items['answer'] = answer
+                result_test_items.append(items)
                 # ----------------------------------
                 if answer == test_item.true:
                     result += 2
+            
             # ----------------------------------
-            Ozu.query.filter_by(user_id=id_).delete()
+            user_result = Result(results = result_test_items, user_id=id_)
+            
+            db.session.add(user_result)
+            db.session.commit()
+
             return redirect(url_for('result', toifa = toifa, ball = ball, result = result))
 
 
@@ -1222,13 +1260,12 @@ def test(sub=None, toifa=None, ball=None):
                         arr_id.append(a.id)
 
                     id_of_user = current_user.get_id()
-                    
+
                     # ----------------------------------
                     starttime = datetime.now()
-                    # hour = timedelta(minutes=1) 
+                    # hour = timedelta(minutes=1)
                     hour = timedelta(hours=1) 
-                    endtime = starttime + hour 
-                    print(f"starttime --> {starttime}, endtime --> {endtime}")                    
+                    endtime = starttime + hour                  
                     # ----------------------------------
 
                     kesh = Ozu(user_id = id_of_user, test_id = arr_id, starttime=starttime, endtime=endtime)
@@ -1303,30 +1340,32 @@ def result(toifa, ball, result):
     check_ozu()
     cheked_session()
     # --------------------------
-    del session['sub']
-    del session['toifa']
-    del session['ball']
+    res = Result.query.filter_by(user_id=current_user.get_id()).first()
+    if not res:
+        return redirect(url_for('selection'))
     # --------------------------
     ball = int(ball) + int(result)
-    result = True
 
-    if toifa == 'oliy_toifa' and int(ball) >= 80:
-        result = True
+    items = Result.query.filter_by(user_id=current_user.get_id()).all()
 
-    elif toifa == '1-toifa' and int(ball) <= 79 and int(ball) >= 70:
-        result = True
+    # result = True
 
-    elif toifa == '2-toifa' and int(ball) <= 69 and int(ball) >= 60:
-        result = True
+    # if toifa == 'oliy_toifa' and int(ball) >= 80:
+    #     result = True
+
+    # elif toifa == '1-toifa' and int(ball) <= 79 and int(ball) >= 70:
+    #     result = True
+
+    # elif toifa == '2-toifa' and int(ball) <= 69 and int(ball) >= 60:
+    #     result = True
     
-    elif int(ball) <= 59 and int(ball) >=55:
-        result = "Tabriklaymiz! mutaxassislikni saqlab qoldingiz"
+    # elif int(ball) <= 59 and int(ball) >=55:
+    #     result = "Tabriklaymiz! mutaxassislikni saqlab qoldingiz"
     
-    else:
-        result = False
-
-
-    return render_template('main-templates/result.html', result = result, ball = ball, toifa = toifa)
+    # else:
+    #     result = False
+    delete_results()
+    return render_template('main-templates/result.html', result = result, ball = ball, toifa = toifa, items=items)
 
 
 # ==== login ====

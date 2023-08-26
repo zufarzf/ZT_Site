@@ -1,10 +1,49 @@
 {% extends 'main-templates/base.html' %}
 {% block main %}
 <div class="result_main-block">
+    <div class="article">
+        <div class="test_main-block">
+            {% for k in items %}
+                {% for i in k.results %}
+                    <div id="test_items_with_timer" class="test_item">
+                        <div class="question">
+                            <p>{{ items.index(k) + 1 }}.</p>
+                            <div class='answ'>
+                                <p>{{ i['test']['ques']|safe }}</p>
+                            </div>
+                        </div>
+                        <!-- <hr> -->
+                        <div class="seperate"></div>
+                        <div class="answers">
+                            
+                            {% if i['answer'] == i['test']['true'] %}
+                            <label class="test_items_with_timer true_ver">
+                                <input style="margin-right: 12px;" type="radio" id="" name="" value="{{ i['test']['true'] }}" disabled>
+                                {{ i['test']['true']|safe }}
+                            </label><br>
+                            {% else %}
+                            <label class="test_items_with_timer wrong_ver">
+                                <input style="margin-right: 12px;" type="radio" id="" name="" value="i['answer']" aria-selected="true" disabled>
+                                {{ i['answer']|safe }}
+                            </label><br>
+                            <label class="test_items_with_timer true_ver">
+                                <input style="margin-right: 12px;" type="radio" id="" name="" value="{{ i['test']['true'] }}" disabled>
+                                <strong>to'g'ri javob</strong> > {{ i['test']['true']|safe }} 
+                            </label><br>
+                            {% endif %}
+                        </div>
+                    </div>
+                    <div class="sep_test"></div>
+                {% endfor %}
+            {% endfor %}
+        </div>
+    </div>
+    <!-- ===================================================== -->
     <div class="results">
         <div class="ball">
             Sizning umumiy balingiz: {{ ball }}
         </div>
     </div>
+    
 </div>
 {% endblock main %}
